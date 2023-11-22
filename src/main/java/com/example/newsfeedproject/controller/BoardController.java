@@ -3,6 +3,7 @@ package com.example.newsfeedproject.controller;
 import com.example.newsfeedproject.dto.BoardRequestDto;
 import com.example.newsfeedproject.dto.BoardResponseDto;
 import com.example.newsfeedproject.dto.CommonResponseDto;
+import com.example.newsfeedproject.entity.Board;
 import com.example.newsfeedproject.jwt.JwtUtil;
 import com.example.newsfeedproject.service.BoardService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -72,8 +73,8 @@ public class BoardController {
     @DeleteMapping("/{boardId}")
     public ResponseEntity<CommonResponseDto> deleteBoardControl(@PathVariable Long boardId, HttpServletRequest req){
         try {
-            CommonResponseDto commonResponseDto = boardService.deleteBoard(boardId, jwtUtil.getUsernameFromHeader(req));
-            return ResponseEntity.ok().body(commonResponseDto);
+            Board board = boardService.deleteBoard(boardId, jwtUtil.getUsernameFromHeader(req));
+            return ResponseEntity.ok().body(new CommonResponseDto("해당 게시글이 삭제되었습니다.", HttpStatus.OK.value()));
 
         } catch (IllegalArgumentException | RejectedExecutionException e){
             return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));

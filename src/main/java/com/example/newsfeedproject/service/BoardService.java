@@ -80,14 +80,14 @@ public class BoardService {
         return new BoardResponseDto(board);
     }
     // 게시글 삭제 서비스
-    public CommonResponseDto deleteBoard(Long boardId, String username) {
+    public Board deleteBoard(Long boardId, String username) {
         // 로그인사용자와 게시글 작성자가 같은지 검증
         Board board = checkLoginUserAndPostUser(boardId, username);
 
         // Delelte
         boardRepository.deleteById(boardId);
 
-        return new CommonResponseDto("해당 게시글이 삭제되었습니다.", HttpStatus.OK.value());
+        return board;
     }
 
     // 로그인한 사용자와 게시글작성자 대조
