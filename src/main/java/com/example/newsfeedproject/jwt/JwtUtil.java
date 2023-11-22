@@ -81,4 +81,12 @@ public class JwtUtil {
     public Claims getUserInfoFromToken(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
+
+    // 헤더에서 사용자 이름 가져오기
+    public String getUsernameFromHeader(HttpServletRequest request) {
+        String tokenValue = getJwtFromHeader(request);
+        Claims info = getUserInfoFromToken(tokenValue);
+        return info.getSubject();
+    }
+
 }
