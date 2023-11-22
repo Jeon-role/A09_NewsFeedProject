@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.RejectedExecutionException;
 
 @RestController
 @RequestMapping("/api/boards")
@@ -28,14 +29,14 @@ public class BoardController {
 
     // 게시글 생성
     @PostMapping("")
-    public ResponseEntity<BoardResponseDto> postBoard(@RequestBody BoardRequestDto boardRequestDto, HttpServletRequest req){
+    public ResponseEntity<BoardResponseDto> postBoardControl(@RequestBody BoardRequestDto boardRequestDto, HttpServletRequest req){
        BoardResponseDto boardResponseDto = boardService.createBoard(boardRequestDto, jwtUtil.getUsernameFromHeader(req));
        return ResponseEntity.status(201).body(boardResponseDto);
     }
 
     // 게시글 전체 조회
     @GetMapping("")
-    public ResponseEntity<List<BoardResponseDto>> getAllBoard(){
+    public ResponseEntity<List<BoardResponseDto>> getAllBoardControl(){
         List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
         boardResponseDtoList = boardService.printAllBoard();
 
@@ -44,7 +45,7 @@ public class BoardController {
 
     // 게시글 선택 조회
     @GetMapping("/{boardId}")
-    public ResponseEntity<CommonResponseDto> getBoard(@PathVariable Long boardId){
+    public ResponseEntity<CommonResponseDto> getBoardControl(@PathVariable Long boardId){
         try {
             BoardResponseDto boardResponseDto = new BoardResponseDto(boardService.getBoard(boardId));
             return ResponseEntity.ok().body(boardResponseDto);
@@ -55,10 +56,29 @@ public class BoardController {
     }
 
     // 게시글 수정
+    @PutMapping("/{boardId}")
+    public ResponseEntity<CommonResponseDto> updateBoardControl(@PathVariable Long boardId, @RequestBody BoardRequestDto boardRequestDto, HttpServletRequest req){
+        try {
+            BoardResponseDto boardResponseDto = boardService.updateBoard(boardId, boardRequestDto, jwtUtil.getUsernameFromHeader(req));
+            return ResponseEntity.ok().body(boardResponseDto);
 
+        } catch (IllegalArgumentException | RejectedExecutionException e){
+            return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
+
+    }
 
     // 게시글 삭제
+    @DeleteMapping("/{boardId}")
+    public ResponseEntity<CommonResponseDto> deleteBoardControl(@PathVariable Long boardId, HttpServletRequest req){
+        try {
+            CommonResponseDto commonResponseDto = boardService.deleteBoard(boardId, jwtUtil.getUsernameFromHeader(req));
+            return ResponseEntity.ok().body(commonResponseDto);
 
+        } catch (IllegalArgumentException | RejectedExecutionException e){
+            return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
+    }
 
 
 
