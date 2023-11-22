@@ -6,12 +6,12 @@ import com.example.newsfeedproject.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/api")
 public class UserController {
-
 
     private final UserService userService;
 
@@ -25,8 +25,8 @@ public class UserController {
     }
 
     @PostMapping("/user/signup")
-    public void signup(SignupRequestDto requestDto) {
+    public void signup(@RequestBody SignupRequestDto requestDto) {
         userService.signup(requestDto);
-        //return ; //로그인 페이지 반환하기!!!
+        return ; //로그인 페이지 반환하기!!!
     }
 }
