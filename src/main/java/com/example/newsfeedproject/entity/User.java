@@ -13,29 +13,29 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table (name = "users")
 public class User {
-   // id, name, password, email
+    // id, name, password, email
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column (nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String username;
 
-    @Column (nullable = false)
+    @Column(nullable = false)
     private String password;
 
-    @Column (nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-    public User(String username, String password, String email,UserRoleEnum role) {
+    public User(String username, String password, String email, UserRoleEnum role) {
         this.username = username;
         this.password = password;
-        this.email=email;
-        this.role=role;
+        this.email = email;
+        this.role = role;
     }
 }
