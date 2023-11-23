@@ -71,29 +71,6 @@ public class UserService {
         return ResponseEntity.ok(new StatusDto("가입성공", HttpStatusCode.valueOf(200).toString()));
     }
 
-    public ResponseEntity<StatusDto> login(LoginRequestDto loginRequestDto, HttpServletResponse res){
-        String username=loginRequestDto.getUsername();
-        String password=loginRequestDto.getPassword();
-
-
-        
-        User user= userRepository.findByUsername(username).orElseThrow(
-                () -> new IllegalArgumentException("등록된 사용자가 없어요"));
-
-        if(!passwordEncoder.matches(password,user.getPassword())){
-            return ResponseEntity.ok(new StatusDto("비밀번호가 일치하지 않습니다.", HttpStatusCode.valueOf(400).toString()));
-        }
-
-        String token= jwtUtil.createToken(user.getUsername(),user.getRole());
-        res.addHeader(JwtUtil.AUTHORIZATION_HEADER,token);
-        UserLogout userLogout= new UserLogout();
-        userLogout.setUser(user);
-        userLogoutRepository.save(userLogout);
-
-
-        return ResponseEntity.ok(new StatusDto("로그인성공", HttpStatusCode.valueOf(200).toString()));
-    }
-
     public ResponseEntity<StatusDto> logout(HttpServletRequest request) {
         String tokenValue = jwtUtil.getJwtFromHeader(request);
 
