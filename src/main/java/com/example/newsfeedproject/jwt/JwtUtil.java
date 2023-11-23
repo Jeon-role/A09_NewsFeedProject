@@ -4,12 +4,18 @@ import com.example.newsfeedproject.entity.UserRoleEnum;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
@@ -31,6 +37,10 @@ public class JwtUtil {
     private Key key;
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
+    // 로그 설정
+    public static final Logger logger = LoggerFactory.getLogger("JWT 관련 로그");
+
+
     @PostConstruct
     public void init() {
         byte[] bytes = Base64.getDecoder().decode(secretKey);
@@ -51,14 +61,22 @@ public class JwtUtil {
                         .compact();
     }
 
+
+
     // header 에서 JWT 가져오기
     public String getJwtFromHeader(HttpServletRequest request) {
-        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
-            return bearerToken.substring(7);
-        }
-        return null;
+        return request.getHeader(AUTHORIZATION_HEADER);
     }
+
+    // JWT SubString
+    public String substringToken(String tokenValue) {
+        if (StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
+            return tokenValue.substring(7);
+        }
+        logger.error("Not Found Token");
+        throw new NullPointerException("Not Found Token");
+    }
+
 
     // 토큰 검증
     public boolean validateToken(String token) {
@@ -85,6 +103,7 @@ public class JwtUtil {
     // 헤더에서 사용자 이름 가져오기
     public String getUsernameFromHeader(HttpServletRequest request) {
         String tokenValue = getJwtFromHeader(request);
+        tokenValue = substringToken(tokenValue);
         Claims info = getUserInfoFromToken(tokenValue);
         return info.getSubject();
     }

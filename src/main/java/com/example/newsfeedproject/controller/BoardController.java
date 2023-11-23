@@ -36,7 +36,7 @@ public class BoardController {
     }
 
     // 게시글 전체 조회
-    @GetMapping("")
+    @GetMapping("/post")
     public ResponseEntity<List<BoardResponseDto>> getAllBoardControl(){
         List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
         boardResponseDtoList = boardService.printAllBoard();
@@ -45,7 +45,7 @@ public class BoardController {
     }
 
     // 게시글 선택 조회
-    @GetMapping("/{boardId}")
+    @GetMapping("/post/{boardId}")
     public ResponseEntity<CommonResponseDto> getBoardControl(@PathVariable Long boardId){
         try {
             BoardResponseDto boardResponseDto = new BoardResponseDto(boardService.getBoard(boardId));
@@ -58,7 +58,9 @@ public class BoardController {
 
     // 게시글 수정
     @PutMapping("/{boardId}")
-    public ResponseEntity<CommonResponseDto> updateBoardControl(@PathVariable Long boardId, @RequestBody BoardRequestDto boardRequestDto, HttpServletRequest req){
+    public ResponseEntity<CommonResponseDto> updateBoardControl(@PathVariable Long boardId,
+                                                                @RequestBody BoardRequestDto boardRequestDto,
+                                                                HttpServletRequest req){
         try {
             BoardResponseDto boardResponseDto = boardService.updateBoard(boardId, boardRequestDto, jwtUtil.getUsernameFromHeader(req));
             return ResponseEntity.ok().body(boardResponseDto);
@@ -71,7 +73,8 @@ public class BoardController {
 
     // 게시글 삭제
     @DeleteMapping("/{boardId}")
-    public ResponseEntity<CommonResponseDto> deleteBoardControl(@PathVariable Long boardId, HttpServletRequest req){
+    public ResponseEntity<CommonResponseDto> deleteBoardControl(@PathVariable Long boardId,
+                                                                HttpServletRequest req){
         try {
             Board board = boardService.deleteBoard(boardId, jwtUtil.getUsernameFromHeader(req));
             return ResponseEntity.ok().body(new CommonResponseDto("해당 게시글이 삭제되었습니다.", HttpStatus.OK.value()));
