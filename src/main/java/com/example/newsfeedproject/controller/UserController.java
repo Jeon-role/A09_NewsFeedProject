@@ -5,6 +5,7 @@ import com.example.newsfeedproject.dto.SignupRequestDto;
 import com.example.newsfeedproject.dto.StatusDto;
 import com.example.newsfeedproject.repository.UserRepository;
 import com.example.newsfeedproject.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,10 +21,6 @@ public class UserController {
         this.userService = userService;
     }
 
-//    @GetMapping("/user/signup")
-//    public void signupPage() {
-//        return; //리턴 페이지 수정해야함!!! 회원가입 페이지 반환하기
-//    }
 
     @PostMapping("/user/signup")
     public ResponseEntity<StatusDto> signup(@RequestBody SignupRequestDto requestDto) {
@@ -35,5 +32,11 @@ public class UserController {
         return userService.login(loginRequestDto,res);
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<StatusDto> logout(HttpServletRequest request){
+        return userService.logout(request);
+    }
+
+    
 
 }
