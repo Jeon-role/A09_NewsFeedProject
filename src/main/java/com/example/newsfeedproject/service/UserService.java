@@ -4,9 +4,13 @@ import com.example.newsfeedproject.dto.LoginRequestDto;
 import com.example.newsfeedproject.dto.SignupRequestDto;
 import com.example.newsfeedproject.dto.StatusDto;
 import com.example.newsfeedproject.entity.User;
+import com.example.newsfeedproject.entity.UserLogout;
 import com.example.newsfeedproject.entity.UserRoleEnum;
 import com.example.newsfeedproject.jwt.JwtUtil;
+import com.example.newsfeedproject.repository.UserLogoutRepository;
 import com.example.newsfeedproject.repository.UserRepository;
+import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -20,16 +24,18 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserLogoutRepository userLogoutRepository;
 
     private final JwtUtil jwtUtil;
 
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder ,JwtUtil jwtUtil) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder ,JwtUtil jwtUtil,UserLogoutRepository userLogoutRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil=jwtUtil;
+        this.userLogoutRepository=userLogoutRepository;
     }
 
     public ResponseEntity<StatusDto> signup(SignupRequestDto requestDto) {
@@ -80,8 +86,35 @@ public class UserService {
 
         String token= jwtUtil.createToken(user.getUsername(),user.getRole());
         res.addHeader(JwtUtil.AUTHORIZATION_HEADER,token);
+        UserLogout userLogout= new UserLogout();
+        userLogout.setUser(user);
+        userLogoutRepository.save(userLogout);
 
 
         return ResponseEntity.ok(new StatusDto("로그인성공", HttpStatusCode.valueOf(200).toString()));
+    }
+
+    public ResponseEntity<StatusDto> logout(HttpServletRequest request) {
+        String tokenValue = jwtUtil.getJwtFromHeader(request);
+
+
+
+        Claims claims;
+        if(tokenValue != null) {
+            if (jwtUtil.validateToken(tokenValue)) {
+                claims = jwtUtil.getUserInfoFromToken(tokenValue);
+            } else {
+                throw new IllegalArgumentException("token Error");
+            }
+            User user =userRepository.findByUsername(claims.getSubject()).orElseThrow(NullPointerException::new);
+
+            UserLogout userLogout= userLogoutRepository.findByUser(user);
+            userLogoutRepository.delete(userLogout);
+
+            return ResponseEntity.ok(new StatusDto("로그아웃 성공", HttpStatusCode.valueOf(200).toString()));
+        }
+        else {
+            return null;
+        }
     }
 }
