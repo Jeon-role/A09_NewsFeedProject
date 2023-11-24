@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 @Slf4j(topic = "JWT 검증 및 인가")
+
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
