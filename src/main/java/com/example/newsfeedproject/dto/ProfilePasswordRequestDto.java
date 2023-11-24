@@ -6,8 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ProfileRequestDto {
-    private String username;
+public class ProfilePasswordRequestDto {
     private String password;
     private String newPassword;
 }

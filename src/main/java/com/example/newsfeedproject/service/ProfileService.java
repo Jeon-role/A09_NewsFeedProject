@@ -1,11 +1,14 @@
 package com.example.newsfeedproject.service;
 
-import com.example.newsfeedproject.dto.ProfileRequestDto;
+import com.example.newsfeedproject.dto.CommonResponseDto;
+import com.example.newsfeedproject.dto.ProfileInformationRequestDto;
+import com.example.newsfeedproject.dto.ProfilePasswordRequestDto;
 import com.example.newsfeedproject.dto.ProfileResponseDto;
-import com.example.newsfeedproject.dto.StatusDto;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public interface ProfileService {
-    ProfileResponseDto getProfile(Long id);
-    ProfileResponseDto updateProfile(Long id, ProfileRequestDto profileRequestDto);
-    StatusDto updatePassword(ProfileRequestDto passwordRequestDto);
+    ProfileResponseDto getProfile(HttpServletRequest req);
+    ProfileResponseDto updateProfile(ProfileInformationRequestDto profileInformationRequestDto, HttpServletRequest req);
+    CommonResponseDto updatePassword(ProfilePasswordRequestDto passwordRequestDto, HttpServletRequest req);
 }
