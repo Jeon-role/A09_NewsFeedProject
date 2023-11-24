@@ -4,6 +4,7 @@ import com.example.newsfeedproject.dto.ProfileRequestDto;
 import com.example.newsfeedproject.dto.ProfileResponseDto;
 import com.example.newsfeedproject.dto.StatusDto;
 import com.example.newsfeedproject.service.ProfileService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,7 @@ public class ProfileController {
 
     // 사용자 ID로 프로필 수정
     @PutMapping("/{id}")
-    public ResponseEntity<ProfileResponseDto> updateProfile(@PathVariable Long id, @RequestBody ProfileRequestDto profileRequestDto) {
+    public ResponseEntity<ProfileResponseDto> updateProfile(@PathVariable Long id, @RequestBody ProfileRequestDto profileRequestDto, HttpServletRequest req) {
         ProfileResponseDto updatedProfile = profileService.updateProfile(id, profileRequestDto);
         return ResponseEntity.ok(updatedProfile);
     }

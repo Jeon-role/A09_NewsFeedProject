@@ -79,6 +79,7 @@ public class BoardService {
 
         return new BoardResponseDto(board);
     }
+
     // 게시글 삭제 서비스
     public Board deleteBoard(Long boardId, String username) {
         // 로그인사용자와 게시글 작성자가 같은지 검증
