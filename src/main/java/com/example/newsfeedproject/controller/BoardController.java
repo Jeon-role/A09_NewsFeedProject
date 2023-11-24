@@ -7,16 +7,21 @@ import com.example.newsfeedproject.entity.Board;
 import com.example.newsfeedproject.jwt.JwtUtil;
 import com.example.newsfeedproject.service.BoardService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.RejectedExecutionException;
 
-@RestController
+@Controller
 @RequestMapping("/api/boards")
 public class BoardController {
 
@@ -30,21 +35,15 @@ public class BoardController {
 
     // 게시글 생성
     @PostMapping("")
-    public ResponseEntity<BoardResponseDto> postBoardControl(@RequestBody BoardRequestDto boardRequestDto, HttpServletRequest req){
-       BoardResponseDto boardResponseDto = boardService.createBoard(boardRequestDto, jwtUtil.getUsernameFromHeader(req));
-       return ResponseEntity.status(201).body(boardResponseDto);
-    }
+    public String postBoardControl(@RequestBody BoardRequestDto boardRequestDto, HttpServletRequest req, RedirectAttributes redirectAttributes){
+        boardService.createBoard(boardRequestDto, jwtUtil.getUsernameFromHeader(req));
 
-    // 게시글 전체 조회
-    @GetMapping("/post")
-    public ResponseEntity<List<BoardResponseDto>> getAllBoardControl(){
-        List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
-        boardResponseDtoList = boardService.printAllBoard();
-
-        return ResponseEntity.status(200).body(boardResponseDtoList);
+        redirectAttributes.addAttribute("status",201);
+        return "redirect:/api/boards/post";
     }
 
     // 게시글 선택 조회
+    @ResponseBody
     @GetMapping("/post/{boardId}")
     public ResponseEntity<CommonResponseDto> getBoardControl(@PathVariable Long boardId){
         try {
@@ -83,8 +82,20 @@ public class BoardController {
             return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
         }
     }
+    // 게시글 전체 조회
+    @ResponseBody
+    @GetMapping("/post")
+    public ResponseEntity<List<BoardResponseDto>> getAllBoardControl(@RequestParam(required = false, defaultValue = "200") int status){
+        List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
+        boardResponseDtoList = boardService.printAllBoard();
 
-
+        return ResponseEntity.status(status).body(boardResponseDtoList);
+    }
+//    public ResponseEntity<?> redirect(HttpStatusCode httpStatusCode){
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setLocation(URI.create("/api/boards/Post"));
+//        return new ResponseEntity<>(headers, httpStatusCode);
+//    }
 
 
 }
