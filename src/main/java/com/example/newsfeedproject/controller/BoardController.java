@@ -11,17 +11,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.RejectedExecutionException;
 
-@Controller
+@RestController
 @RequestMapping("/api/boards")
 public class BoardController {
 
@@ -35,24 +34,10 @@ public class BoardController {
 
     // 게시글 생성
     @PostMapping("")
-    public String postBoardControl(@RequestBody BoardRequestDto boardRequestDto, HttpServletRequest req, RedirectAttributes redirectAttributes){
+    public ResponseEntity postBoardControl(@RequestBody BoardRequestDto boardRequestDto, HttpServletRequest req){
         boardService.createBoard(boardRequestDto, jwtUtil.getUsernameFromHeader(req));
 
-        redirectAttributes.addAttribute("status",201);
-        return "redirect:/api/boards/post";
-    }
-
-    // 게시글 선택 조회
-    @ResponseBody
-    @GetMapping("/post/{boardId}")
-    public ResponseEntity<CommonResponseDto> getBoardControl(@PathVariable Long boardId){
-        try {
-            BoardResponseDto boardResponseDto = new BoardResponseDto(boardService.getBoard(boardId));
-            return ResponseEntity.ok().body(boardResponseDto);
-
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
-        }
+        return redirectToGetAllBoards();
     }
 
     // 게시글 수정
@@ -61,8 +46,8 @@ public class BoardController {
                                                                 @RequestBody BoardRequestDto boardRequestDto,
                                                                 HttpServletRequest req){
         try {
-            BoardResponseDto boardResponseDto = boardService.updateBoard(boardId, boardRequestDto, jwtUtil.getUsernameFromHeader(req));
-            return ResponseEntity.ok().body(boardResponseDto);
+            boardService.updateBoard(boardId, boardRequestDto, jwtUtil.getUsernameFromHeader(req));
+            return redirectToGetAllBoards();
 
         } catch (IllegalArgumentException | RejectedExecutionException e){
             return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
@@ -75,27 +60,40 @@ public class BoardController {
     public ResponseEntity<CommonResponseDto> deleteBoardControl(@PathVariable Long boardId,
                                                                 HttpServletRequest req){
         try {
-            Board board = boardService.deleteBoard(boardId, jwtUtil.getUsernameFromHeader(req));
-            return ResponseEntity.ok().body(new CommonResponseDto("해당 게시글이 삭제되었습니다.", HttpStatus.OK.value()));
+            boardService.deleteBoard(boardId, jwtUtil.getUsernameFromHeader(req));
+            return redirectToGetAllBoards();
 
         } catch (IllegalArgumentException | RejectedExecutionException e){
             return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
         }
     }
+
+    // 게시글 선택 조회
+    @GetMapping("/post/{boardId}")
+    public ResponseEntity<CommonResponseDto> getBoardControl(@PathVariable Long boardId){
+        try {
+            BoardResponseDto boardResponseDto = new BoardResponseDto(boardService.getBoard(boardId));
+            return ResponseEntity.ok().body(boardResponseDto);
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
+    }
+
     // 게시글 전체 조회
-    @ResponseBody
     @GetMapping("/post")
-    public ResponseEntity<List<BoardResponseDto>> getAllBoardControl(@RequestParam(required = false, defaultValue = "200") int status){
+    public ResponseEntity<List<BoardResponseDto>> getAllBoardControl(){
         List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
         boardResponseDtoList = boardService.printAllBoard();
 
-        return ResponseEntity.status(status).body(boardResponseDtoList);
+        return ResponseEntity.status(200).body(boardResponseDtoList);
     }
-//    public ResponseEntity<?> redirect(HttpStatusCode httpStatusCode){
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setLocation(URI.create("/api/boards/Post"));
-//        return new ResponseEntity<>(headers, httpStatusCode);
-//    }
+
+    public ResponseEntity redirectToGetAllBoards(){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create("/api/boards/post"));
+        return new ResponseEntity(headers, HttpStatus.MOVED_PERMANENTLY);
+    }
 
 
 }
