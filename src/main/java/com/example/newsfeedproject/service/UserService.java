@@ -1,20 +1,12 @@
 package com.example.newsfeedproject.service;
 
-import com.example.newsfeedproject.dto.LoginRequestDto;
 import com.example.newsfeedproject.dto.SignupRequestDto;
 import com.example.newsfeedproject.dto.StatusDto;
 import com.example.newsfeedproject.entity.User;
-//import com.example.newsfeedproject.entity.UserLogout;
 import com.example.newsfeedproject.entity.UserLogin;
 import com.example.newsfeedproject.entity.UserRoleEnum;
-import com.example.newsfeedproject.jwt.JwtUtil;
-//import com.example.newsfeedproject.repository.UserLogoutRepository;
 import com.example.newsfeedproject.repository.UserLoginRepository;
 import com.example.newsfeedproject.repository.UserRepository;
-import io.jsonwebtoken.Claims;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;

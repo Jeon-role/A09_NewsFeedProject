@@ -5,7 +5,6 @@ import com.example.newsfeedproject.dto.ProfileInformationRequestDto;
 import com.example.newsfeedproject.dto.ProfilePasswordRequestDto;
 import com.example.newsfeedproject.dto.ProfileResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 public interface ProfileService {
     ProfileResponseDto getProfile(HttpServletRequest req);

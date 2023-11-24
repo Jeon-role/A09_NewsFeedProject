@@ -8,7 +8,6 @@ import com.example.newsfeedproject.entity.User;
 import com.example.newsfeedproject.jwt.JwtUtil;
 import com.example.newsfeedproject.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
