@@ -3,18 +3,14 @@ package com.example.newsfeedproject.controller;
 import com.example.newsfeedproject.dto.BoardRequestDto;
 import com.example.newsfeedproject.dto.BoardResponseDto;
 import com.example.newsfeedproject.dto.CommonResponseDto;
-import com.example.newsfeedproject.entity.Board;
 import com.example.newsfeedproject.jwt.JwtUtil;
 import com.example.newsfeedproject.service.BoardService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;

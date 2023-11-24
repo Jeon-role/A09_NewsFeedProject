@@ -2,21 +2,16 @@ package com.example.newsfeedproject.service;
 
 import com.example.newsfeedproject.dto.BoardRequestDto;
 import com.example.newsfeedproject.dto.BoardResponseDto;
-import com.example.newsfeedproject.dto.CommonResponseDto;
 import com.example.newsfeedproject.entity.Board;
 import com.example.newsfeedproject.entity.User;
 import com.example.newsfeedproject.repository.BoardRepository;
 import com.example.newsfeedproject.repository.UserRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class BoardService {

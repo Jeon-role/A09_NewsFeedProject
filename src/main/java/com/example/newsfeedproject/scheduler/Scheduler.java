@@ -1,7 +1,6 @@
 package com.example.newsfeedproject.scheduler;
 
 import com.example.newsfeedproject.entity.UserLogin;
-
 import com.example.newsfeedproject.repository.UserLoginRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j(topic = "Scheduler")
 @Component
