@@ -1,12 +1,15 @@
 package com.example.newsfeedproject.jwt;
 
+import com.example.newsfeedproject.entity.User;
+import com.example.newsfeedproject.entity.UserLogin;
 import com.example.newsfeedproject.entity.UserRoleEnum;
+import com.example.newsfeedproject.repository.UserLoginRepository;
+import com.example.newsfeedproject.repository.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,11 +17,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
+import java.util.Optional;
 
 @Slf4j(topic = "JwtUtil")
 @Component
@@ -39,6 +41,15 @@ public class JwtUtil {
 
     // 로그 설정
     public static final Logger logger = LoggerFactory.getLogger("JWT 관련 로그");
+
+    private final UserRepository userRepository;
+
+    private final UserLoginRepository userLoginRepository;
+
+    public JwtUtil(UserRepository userRepository, UserLoginRepository userLoginRepository) {
+        this.userRepository = userRepository;
+        this.userLoginRepository = userLoginRepository;
+    }
 
 
     @PostConstruct
@@ -81,6 +92,10 @@ public class JwtUtil {
     // 토큰 검증
     public boolean validateToken(String token) {
         try {
+
+            userLoginCheck(token);
+
+
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (SecurityException | MalformedJwtException | SignatureException e) {
@@ -106,6 +121,19 @@ public class JwtUtil {
         tokenValue = substringToken(tokenValue);
         Claims info = getUserInfoFromToken(tokenValue);
         return info.getSubject();
+    }
+
+    public void userLoginCheck(String token){
+        Claims claims = getUserInfoFromToken(token);
+        User user = userRepository.findByUsername(claims.getSubject()).orElseThrow(() -> new IllegalArgumentException(" 유저가 존재하지않아요"));
+        UserLogin userLogin = userLoginRepository.findByUser(user).orElseThrow(() -> new IllegalArgumentException("유저로그인에 존재하지않아요"));
+
+        String token1 = substringToken(userLogin.getToken());
+
+        if(!token1.equals(token)){
+            throw new IllegalArgumentException("토큰이 맞지않아요");
+        }
+
     }
 
 }
