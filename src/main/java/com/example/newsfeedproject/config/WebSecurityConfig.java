@@ -3,7 +3,7 @@ package com.example.newsfeedproject.config;
 import com.example.newsfeedproject.jwt.JwtAuthenticationFilter;
 import com.example.newsfeedproject.jwt.JwtAuthorizationFilter;
 import com.example.newsfeedproject.jwt.JwtUtil;
-import com.example.newsfeedproject.repository.UserLoginRepository;
+import com.example.newsfeedproject.user.repository.UserLoginRepository;
 import com.example.newsfeedproject.security.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

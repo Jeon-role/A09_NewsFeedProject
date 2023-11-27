@@ -1,7 +1,7 @@
 package com.example.newsfeedproject.security;
 
-import com.example.newsfeedproject.entity.User;
-import com.example.newsfeedproject.repository.UserRepository;
+import com.example.newsfeedproject.user.entity.User;
+import com.example.newsfeedproject.user.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
