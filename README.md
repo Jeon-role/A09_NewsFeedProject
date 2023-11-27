@@ -7,7 +7,8 @@ https://www.figma.com/file/7SzzoTpZJxjjIbkbeUHq0w/%EB%89%B4%EC%8A%A4%ED%94%BC%EB
 ![image](https://github.com/phantomrole/A09_NewsFeedProject/assets/146637795/4b646eb3-d380-4420-9ba0-f2af70a0f7ed)
 
 ## ERD 다이어그램
-![image](https://github.com/phantomrole/A09_NewsFeedProject/assets/146637795/7c73ca8e-1bfb-44f3-aac9-45ba4c3fc219)
+![ERD](https://github.com/phantomrole/A09_NewsFeedProject/assets/35451795/3dfe5b83-9115-4693-9d22-bc08c87aae7b)
+
 
 ## API 명세서
 https://www.notion.so/a3acf4a786f04ffb92ed84c6bf1866b4?v=120eb705896c4add951e5b1126980b87&pvs=4
