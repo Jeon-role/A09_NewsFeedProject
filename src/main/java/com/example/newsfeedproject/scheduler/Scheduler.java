@@ -1,7 +1,7 @@
 package com.example.newsfeedproject.scheduler;
 
-import com.example.newsfeedproject.entity.UserLogin;
-import com.example.newsfeedproject.repository.UserLoginRepository;
+import com.example.newsfeedproject.user.entity.UserLogin;
+import com.example.newsfeedproject.user.repository.UserLoginRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

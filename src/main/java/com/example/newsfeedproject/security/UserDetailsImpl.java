@@ -1,8 +1,8 @@
 package com.example.newsfeedproject.security;
 
 
-import com.example.newsfeedproject.entity.User;
-import com.example.newsfeedproject.entity.UserRoleEnum;
+import com.example.newsfeedproject.user.entity.User;
+import com.example.newsfeedproject.user.entity.UserRoleEnum;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

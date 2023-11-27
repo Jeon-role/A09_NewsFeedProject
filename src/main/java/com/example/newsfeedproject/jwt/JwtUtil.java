@@ -1,10 +1,10 @@
 package com.example.newsfeedproject.jwt;
 
-import com.example.newsfeedproject.entity.User;
-import com.example.newsfeedproject.entity.UserLogin;
-import com.example.newsfeedproject.entity.UserRoleEnum;
-import com.example.newsfeedproject.repository.UserLoginRepository;
-import com.example.newsfeedproject.repository.UserRepository;
+import com.example.newsfeedproject.user.entity.User;
+import com.example.newsfeedproject.user.entity.UserLogin;
+import com.example.newsfeedproject.user.entity.UserRoleEnum;
+import com.example.newsfeedproject.user.repository.UserLoginRepository;
+import com.example.newsfeedproject.user.repository.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;

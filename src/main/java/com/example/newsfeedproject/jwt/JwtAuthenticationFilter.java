@@ -1,9 +1,9 @@
 package com.example.newsfeedproject.jwt;
 
-import com.example.newsfeedproject.dto.LoginRequestDto;
-import com.example.newsfeedproject.entity.UserLogin;
-import com.example.newsfeedproject.entity.UserRoleEnum;
-import com.example.newsfeedproject.repository.UserLoginRepository;
+import com.example.newsfeedproject.user.dto.LoginRequestDto;
+import com.example.newsfeedproject.user.entity.UserLogin;
+import com.example.newsfeedproject.user.entity.UserRoleEnum;
+import com.example.newsfeedproject.user.repository.UserLoginRepository;
 import com.example.newsfeedproject.security.UserDetailsImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
